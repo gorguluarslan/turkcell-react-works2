@@ -7,16 +7,30 @@ const Users = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios("https://jsonplaceholder.typicode.com/users")
-      .then((res) => {
-        setUsers(res.data);
+    // axios("https://jsonplaceholder.typicode.com/users")
+    //   .then((res) => {
+    //     setUsers(res.data);
 
-        axios(
-          `https://jsonplaceholder.typicode.com/posts?userId=${res.data[0].id}`
-        ).then((res) => setPosts(res.data));
-      })
-      .finally(() => setLoading(false));
+    //     axios(
+    //       `https://jsonplaceholder.typicode.com/posts?userId=${res.data[0].id}`
+    //     ).then((res) => setPosts(res.data));
+    //   })
+    //   .finally(() => setLoading(false));
+    getData();
   }, []);
+
+  const getData = async () => {
+    const { data: users } = await axios(
+      "https://jsonplaceholder.typicode.com/users"
+    );
+    const { data: posts } = await axios(
+      `https://jsonplaceholder.typicode.com/posts?userId=${users[0].id}`
+    );
+
+    setLoading(false);
+    setUsers(users);
+    setPosts(posts);
+  };
 
   return (
     <div>
