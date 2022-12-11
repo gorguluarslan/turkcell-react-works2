@@ -6,37 +6,29 @@ const Users = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  //Anonim function
+  // (() => {
+  //   console.log("merhaba");
+  // })();
+
   useEffect(() => {
-    // axios("https://jsonplaceholder.typicode.com/usersf")
-    //   .then((res) => {
-    //     setUsers(res.data);
-    //     axios(
-    //       `https://jsonplaceholder.typicode.com/posts?userId=${res.data[0].id}`
-    //     ).then((res) => setPosts(res.data));
-    //   })
-    //   .catch((error) => {
-    //     console.log("error", error);
-    //   })
-    //   .finally(() => setLoading(false));
-    getData();
+    (async () => {
+      try {
+        const { data: users } = await axios(
+          "https://jsonplaceholder.typicode.com/users"
+        );
+        const { data: posts } = await axios(
+          `https://jsonplaceholder.typicode.com/posts?userId=${users[0].id}`
+        );
+
+        setLoading(false);
+        setUsers(users);
+        setPosts(posts);
+      } catch (error) {
+        console.log("error", error);
+      }
+    })();
   }, []);
-
-  const getData = async () => {
-    try {
-      const { data: users } = await axios(
-        "https://jsonplaceholder.typicode.com/usersf"
-      );
-      const { data: posts } = await axios(
-        `https://jsonplaceholder.typicode.com/posts?userId=${users[0].id}`
-      );
-
-      setLoading(false);
-      setUsers(users);
-      setPosts(posts);
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
 
   return (
     <div>
